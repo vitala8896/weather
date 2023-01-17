@@ -1,14 +1,26 @@
 import React from 'react'
+import { useDispatch } from "react-redux"
 import styled from 'styled-components'
 import { NavLink } from 'react-router-dom'
+//@ts-ignore
+import Plus from './../Assets/Images/plus.png'
+//@ts-ignore
+import { setReduxFormOpen } from '../store/citySlice.tsx'
 
-const Header = () => {   
+const Header = () => { 
+  const dispatch = useDispatch()
   return (
     <StyleHeader>
       <Container>
         <Menu>
           <SNavLink to={'/'} >Home</SNavLink>
         </Menu>
+        <AddCity onClick={()=>{
+          dispatch(setReduxFormOpen())
+        }}>
+          <p>Add city</p>
+          <Img src={Plus} alt='plus'/>
+        </AddCity>        
       </Container>
     </StyleHeader>
   )
@@ -84,4 +96,17 @@ const SNavLink = styled(NavLink)`
     font-size: 18px;
     padding: 0 5px;
   }
+`;
+const AddCity = styled.button`
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  width: 125px;
+  background: white;
+  border-radius: 5px;
+  padding: 0 5px 0 10px;
+  cursor: pointer;
+`;
+const Img = styled.img`
+  width: 30px;
 `;

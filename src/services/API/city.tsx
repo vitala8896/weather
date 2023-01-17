@@ -2,11 +2,10 @@
 import axios from './../axios.tsx'
 // @ts-ignore
 import { setReduxActiveCityName, setReduxActiveCity } from '../../store/citySlice.tsx'
-// @ts-ignore
-import { names } from './../../data/data.tsx'
 
-export const getAllCities = () => {
-  let requests = names.map(async name => {
+export const getAllCities = (names: any[]) => {
+  setLocalCitiesNames(names)
+  let requests = names.map(async (name: any) => {
     const res = await fetch(`https://api.openweathermap.org/data/2.5/forecast?q=${name}&appid=${process.env.REACT_APP_API_KEY}&units=metric`)
     return await res.json()
   });
@@ -48,4 +47,11 @@ export const setLocalCities = (cities: object) => {
 export const getLocalCities = () => {
 	const cities = localStorage.getItem('cities')
 	return cities ? JSON.parse(cities) : {}
+}
+export const getLocalCitiesName = () => {
+	const citiesName = localStorage.getItem('namesCities')
+	return citiesName ? JSON.parse(citiesName) : ''
+}
+export const setLocalCitiesNames = (names: object) => {
+	localStorage.setItem('namesCities', JSON.stringify(names))
 }

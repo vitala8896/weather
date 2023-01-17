@@ -1,28 +1,31 @@
-import React from 'react'
 import styled from 'styled-components'
-import { useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useSelector } from "react-redux"
 // @ts-ignore
 import Cities from '../components/Cities.tsx'
 // @ts-ignore
 import Header from "./../components/Header.tsx"
+// @ts-ignore
+import Form from '../components/Form.tsx'
 
 export const HomePage = () => {
-  const { name } =
+  const { citiesNames } =
   useSelector((state: any) => ({
-    name: state.city.cities.activeCity.name,
+    citiesNames: state.city.cities.names,
   }))
   const render = () => {
     return (
       <Page>
-        <Header/>        
+        <Header/> 
+          <Form/>       
         <Cities />        
       </Page>
     )
   }
   useEffect( () => {  
     render()
-  }, [name]) 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [citiesNames]) 
     return (
       <>
         {render()}

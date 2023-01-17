@@ -1,24 +1,23 @@
-import { useEffect } from 'react'
-import { NavLink, useHistory } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { NavLink } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-// @ts-ignore
-import { setReduxCitiesList, setReduxActiveCity } from '../store/citySlice.tsx'
 import styled from 'styled-components'
-// import cityData from '../data/data.json'
-import React from 'react'
 // @ts-ignore
-import { getAllCities, getLocalCities } from '../services/API/city.tsx'
+import { setReduxCitiesList, setReduxActiveCity, setReduxAddCityName } from '../store/citySlice.tsx'
+// @ts-ignore
+import { getAllCities, getLocalCitiesName, getLocalCities } from '../services/API/city.tsx'
 
 
 const Cities = () => {
   const dispatch = useDispatch()
-  let history = useHistory()  
-  const { list, activeCity } = useSelector((state: any) => ({
+  const { list, citiesNames, form } = useSelector((state: any) => ({
     list: state.city.cities.list,
-    activeCity: state.city.cities.activeCity,
-  })) 
-  getAllCities()
-  useEffect(() => {    
+    citiesNames: state.city.cities.names,
+    form: state.city.form.open,
+  }))
+  useEffect(() => {  
+    getAllCities(getLocalCitiesName() ? getLocalCitiesName() : citiesNames)
+    dispatch(setReduxAddCityName(getLocalCitiesName()))  
     const cities: any = getLocalCities() 
     if (cities) {
       const list = cities.map((item: any) => {
@@ -32,7 +31,9 @@ const Cities = () => {
       })
       dispatch(setReduxCitiesList(list))
     } 
-  }, [dispatch, activeCity.name, history.location.pathname])  
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [form]) 
+  
   const renderList = () => { 
     type itemType = {
       id: number;
@@ -68,6 +69,10 @@ const Cities = () => {
       )
     })
   }
+  useEffect(() => {  
+    renderList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [citiesNames]) 
   return (
     <List>  
       <Container>
